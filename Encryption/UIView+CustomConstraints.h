@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (CustomConstraits)
+@interface UIView (CustomConstraints)
 
+-(void) makeConstraintsFromView: (UIView*)subview ToView: (UIView *)superview;
+-(void) makeConstraintsFromTextView: (UITextView*)subview ToView: (UIView *)superview;
+-(void) makeConstraintsFromView: (UIView*)subview ToView: (UIView *)superview witTopConstant: (CGFloat)topConstant withLeftConstant: (CGFloat)leftConstant withRightConstant: (CGFloat)rightConstant;
 @end

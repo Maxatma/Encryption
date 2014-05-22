@@ -7,6 +7,25 @@
 //
 
 #import "MasterViewController.h"
+@interface MasterViewController ()
+{
+    NSString *currentName;
+    NSData   *currentContent;
+}
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NoteNameView  *noteNameView;
+@property (nonatomic, strong) PasswordView  *passView;
+
+@property (nonatomic, strong) NSMutableArray *noteNamesArray;
+@property (nonatomic, strong) UIBarButtonItem *addButton;
+
+
+-  (IBAction)addButtonPressed:(id)sender;
+-  (void) passwordViewOkayButtonPressed;
+
+
+@end
+
 
 @implementation MasterViewController
 
@@ -14,23 +33,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _noteNamesArray=[self getFileNamesInDocuments];
-   // [self createFilesInDocuments:23];
+    self.noteNamesArray=[NSMutableArray arrayWithArray:[self getFileNamesInDocuments]];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     self.noteNameView=[[[NSBundle mainBundle] loadNibNamed:@"noteNameView" owner:self options:nil] objectAtIndex:0];
-    self.noteNameView.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.noteNameView.frame.size.width, self.noteNameView.frame.size.height);
     self.noteNameView.delegate=self;
     
     self.passView=[[[NSBundle mainBundle] loadNibNamed:@"passwordView" owner:self options:nil] objectAtIndex:0];
-    self.passView.frame = CGRectMake(8, 100, self.passView.frame.size.width, self.passView.frame.size.height);
     self.passView.delegate=self;
 
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *barButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                                                 target:self
+                                                                                 action:@selector(editButtonPressed)];
+    
+
+    self.navigationItem.leftBarButtonItem = barButtonItem;
+    
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
-    _noteNamesArray=[self getFileNamesInDocuments];
+    _noteNamesArray=[NSMutableArray arrayWithArray:[self getFileNamesInDocuments]];
     [self.tableView reloadData];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithTitle:@"Add"
@@ -39,7 +64,6 @@
     self.addButton =addButton;
     self.navigationItem.rightBarButtonItem=self.addButton;
 }
-
 
 #pragma mark - Table View
 
@@ -73,40 +97,39 @@
         //deleting note from documents
         [self deleteFromDocumentsDirectrory:_noteNamesArray[indexPath.row]];
         [_noteNamesArray removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
 }
 
-- (void)tableView:(UITableView *)tableView
-didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.noteNameView removeFromSuperview];
-    self.passView.frame = CGRectMake([self.tableView bounds].origin.x+8, [self.tableView bounds].origin.y+100, self.passView.frame.size.width, self.passView.frame.size.height);
-    
-    NSError *error;
-    
+    [self.view makeConstraintsFromView:self.passView ToView:self.view];
+
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", [self getDocumentsDirectory], _noteNamesArray[indexPath.row]];
     currentName=_noteNamesArray[indexPath.row];
-    currentContent=[NSString stringWithContentsOfFile:filePath
-                                             encoding:NSUTF8StringEncoding
-                                                error:&error];
-    
-	[self.view addSubview:self.passView];
+    currentContent= [NSData dataWithContentsOfFile:filePath];
     [self.passView.passTextField becomeFirstResponder];
     
 }
 #pragma mark Buttons
+
+-(void)editButtonPressed{
+    [self.tableView setEditing:!self.tableView.editing animated:YES];
+    
+    if (self.tableView.editing)
+        [self.navigationItem.leftBarButtonItem setTitle:@"Done"];
+    else
+        [self.navigationItem.leftBarButtonItem setTitle:@"Edit"];
+}
+
 - (IBAction)addButtonPressed:(id)sender
 {
     [self.passView removeFromSuperview];
-    self.noteNameView.frame = CGRectMake([self.tableView bounds].origin.x+8, [self.tableView bounds].origin.y+100, self.noteNameView.frame.size.width, self.noteNameView.frame.size.height);
-    [self.view addSubview:self.noteNameView];
-    
+    [self.view makeConstraintsFromView:self.noteNameView ToView:self.view];
     [self.noteNameView.nameTextfield becomeFirstResponder];
 }
 
@@ -115,13 +138,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 -(void)passwordViewOkayButtonPressed
 {
     NSString *passtext = self.passView.passTextField.text;
-    NSString *content = currentContent;
+    NSData *content = currentContent;
     NSString *name = currentName;
     [self.passView cleanTextField];
     [self.passView removeFromSuperview];
+
+    content=[content encryptContentwithpass:passtext andname:name andContent:content];
     
-    
-    content=[self encryptContentwithpass:passtext andname:name andContent:content];
     DetailViewController *detail = [[DetailViewController alloc]init];
     detail.noteContent=content;
     detail.noteTitle=currentName;
@@ -133,7 +156,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.passView cleanTextField];
     [self.passView removeFromSuperview];
-
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated: YES];
 }
 
 #pragma mark NewNote Buttons Methods
@@ -142,6 +165,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.noteNameView removeFromSuperview];
     [self.noteNameView cleanTextField];
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated: YES];
 }
 
 -(void)noteNameOkayButtonPressed
@@ -158,13 +182,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 #pragma mark File Methods
 
--(NSMutableArray *) getFileNamesInDocuments
+-(NSArray *) getFileNamesInDocuments
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSFileManager  *fileManager = [[NSFileManager alloc] init];
-    NSMutableArray *filenames= [fileManager contentsOfDirectoryAtPath:documentsDirectory
-                                                                error:nil];
+    NSArray *filenames= [NSMutableArray arrayWithArray:[fileManager contentsOfDirectoryAtPath:documentsDirectory
+                                                                                        error:nil]];
     return filenames;
 }
 
@@ -173,27 +197,34 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    for (int i=1; i<=numberOfNotes; i++) {
+    for (int i=1; i<=numberOfNotes; i++)
+    {
     
-    NSString *noteName = [NSString stringWithFormat:@"note %i",i];
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, noteName];
+        NSString *noteName = [NSString stringWithFormat:@"note %i",i];
+        NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, noteName];
 
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-      // if file is not exist, create it
-     NSString *contentString = [NSString stringWithFormat:@"hello, this is my %i note, glad to  see u",i];
-      NSError *error;
-      [contentString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
+        {
+          // if file is not exist, create it
+         NSString *contentString = [NSString stringWithFormat:@"hello, this is my %i note, glad to  see u",i];
+          NSError *error;
+          [contentString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+        }
+        
+            if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath])
+            {
+                NSLog(@"Writable %@", noteName);
+            }
+            else
+            {
+                NSLog(@"Not Writable %@",noteName);
+            }
+
     }
-    
-  if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
-      NSLog(@"Writable %@", noteName);
-   }else {
-      NSLog(@"Not Writable %@",noteName);}
-
-  }
 }
 
--(void) deleteFromDocumentsDirectrory:(NSString*)filename{
+-(void) deleteFromDocumentsDirectrory:(NSString*)filename
+{
     NSString *documentsDirectory =[self getDocumentsDirectory];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, filename];
     NSError *error;
@@ -214,62 +245,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         return documentsDirectory;
 }
 
--(void) saveNoteInDocumentsWithName: (NSString*)name andContent:(NSString*)content;
-{
-    NSString *documentsDirectory =[self getDocumentsDirectory];
-    NSString *noteName = name;
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@", [self getDocumentsDirectory], noteName];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath])
-    {
-        NSError *error;
-        [content writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-        NSLog(@"file not exist");
-    }
-    
-    if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath])
-    {
-        NSLog(@"Writable %@", noteName);
-    }else
-    {
-        NSLog(@"Not Writable %@",noteName);
-    }
-}
-
-#pragma mark Encryption Methods
-
--(void) transform:(NSData*)input withkey:(NSString*)key
-{
-    if (![key isEqualToString:@""])
-    {
-        
-        unsigned char* pBytesInput = (unsigned char*)[input bytes];
-        unsigned char* pBytesKey   = (unsigned char*)[[key dataUsingEncoding:NSUTF8StringEncoding] bytes];
-        unsigned int inputlength = [input length];
-        unsigned int keylength = [key length];
-        
-        unsigned int v = 0;
-        unsigned int k = inputlength % keylength;
-        unsigned char c;
-        
-        for (v; v < inputlength; v++) {
-            c = pBytesInput[v] ^ pBytesKey[k];
-            pBytesInput[v] = c;
-            
-            k = (++k < keylength ? k : 0);
-        }
-        
-    }
-}
-
--(NSString *)encryptContentwithpass:(NSString*)pass andname:(NSString*)name andContent:(NSString*)content
-{    
-    NSData *contentData = [content dataUsingEncoding:NSUTF8StringEncoding];
-    [self transform:contentData withkey:pass];
-    content=@"12";
-    NSString *dataString = [[NSString alloc]initWithData:contentData encoding:NSUTF8StringEncoding];
-    content = dataString;
-    return content;
-}
 
 @end

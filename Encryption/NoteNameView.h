@@ -7,14 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NoteNameDelegate.h"
+
+@protocol NoteNameDelegate <NSObject>
+
+
+-(void) noteNameOkayButtonPressed;
+-(void) noteNameCancelButtonPressed;
+
+
+@end
+
 
 @interface NoteNameView : UIView
-@property (nonatomic, assign) id <NoteNameDelegate> delegate;
 
-- (IBAction)noteCancelButtonPressed:(id)sender;
-- (IBAction)noteOkayButtonPressed:(id)sender;
+@property (nonatomic, weak) id <NoteNameDelegate> delegate;
+@property (nonatomic,weak) IBOutlet UITextField *nameTextfield;
 
-@property (weak, nonatomic) IBOutlet UITextField *nameTextfield;
 - (void) cleanTextField;
+
+
 @end

@@ -10,4 +10,6 @@
 
 @interface NSData (Encryption)
 
+-(NSData *)encryptContentwithpass:(NSString*)pass andname:(NSString*)name andContent:(NSData*)content;
+
 @end

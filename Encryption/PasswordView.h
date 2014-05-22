@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PasswordViewDelegate.h"
+
+@protocol PasswordViewDelegate <NSObject>
+
+-(void) passwordViewOkayButtonPressed;
+-(void) passwordViewCancelButtonPressed;
+
+@end
+
 
 @interface PasswordView : UIView
-@property (nonatomic, assign) id <PasswordViewDelegate> delegate;
 
+@property (nonatomic, weak) id <PasswordViewDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UITextField *passTextField;
-
-- (IBAction)cancelButtonPressed:(id)sender;
-- (IBAction)okayButtonPressed:(id)sender;
 
 - (void) cleanTextField;
 

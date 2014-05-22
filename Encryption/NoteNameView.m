@@ -10,15 +10,19 @@
 
 @implementation NoteNameView
 
-- (IBAction)noteCancelButtonPressed:(id)sender {
+- (IBAction)noteCancelButtonPressed:(id)sender
+{
     [self.delegate noteNameCancelButtonPressed];
 }
 
-- (IBAction)noteOkayButtonPressed:(id)sender {
+- (IBAction)noteOkayButtonPressed:(id)sender
+{
     [self.delegate noteNameOkayButtonPressed];
 }
 
-- (void) cleanTextField{
+- (void) cleanTextField
+{
     self.nameTextfield.text =@"";
 }
+
 @end

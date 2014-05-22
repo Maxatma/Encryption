@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		793DC08D1910D59500DE18CF /* NSData+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 793DC08C1910D59500DE18CF /* NSData+Encryption.m */; };
+		793DC0911910DBA500DE18CF /* UIView+CustomConstraints.m in Sources */ = {isa = PBXBuildFile; fileRef = 793DC0901910DBA500DE18CF /* UIView+CustomConstraints.m */; };
 		7946AFEF1908FD820018C0DE /* passwordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7946AFEE1908FD820018C0DE /* passwordView.xib */; };
 		7946AFF3190904410018C0DE /* PasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7946AFF2190904410018C0DE /* PasswordView.m */; };
 		7946AFFB1909537D0018C0DE /* noteNameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7946AFFA1909537D0018C0DE /* noteNameView.xib */; };
@@ -39,14 +41,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		793DC08B1910D59500DE18CF /* NSData+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Encryption.h"; sourceTree = "<group>"; };
+		793DC08C1910D59500DE18CF /* NSData+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Encryption.m"; sourceTree = "<group>"; };
+		793DC08F1910DBA500DE18CF /* UIView+CustomConstraints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CustomConstraints.h"; sourceTree = "<group>"; };
+		793DC0901910DBA500DE18CF /* UIView+CustomConstraints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CustomConstraints.m"; sourceTree = "<group>"; };
 		7946AFEE1908FD820018C0DE /* passwordView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = passwordView.xib; sourceTree = "<group>"; };
 		7946AFF1190904410018C0DE /* PasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordView.h; sourceTree = "<group>"; };
 		7946AFF2190904410018C0DE /* PasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordView.m; sourceTree = "<group>"; };
-		7946AFF4190918BD0018C0DE /* PasswordViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PasswordViewDelegate.h; sourceTree = "<group>"; };
 		7946AFFA1909537D0018C0DE /* noteNameView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = noteNameView.xib; sourceTree = "<group>"; };
 		7946AFFD190955180018C0DE /* NoteNameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteNameView.h; sourceTree = "<group>"; };
 		7946AFFE190955180018C0DE /* NoteNameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteNameView.m; sourceTree = "<group>"; };
-		7946B0001909553A0018C0DE /* NoteNameDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoteNameDelegate.h; sourceTree = "<group>"; };
 		79C382531907C80500F43E83 /* Encryption.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Encryption.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79C382561907C80600F43E83 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		79C382581907C80600F43E83 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -94,13 +98,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		793DC08E1910D59B00DE18CF /* NSData+Encryption */ = {
+			isa = PBXGroup;
+			children = (
+				793DC08B1910D59500DE18CF /* NSData+Encryption.h */,
+				793DC08C1910D59500DE18CF /* NSData+Encryption.m */,
+			);
+			name = "NSData+Encryption";
+			sourceTree = "<group>";
+		};
+		793DC0921910DBAC00DE18CF /* Custom Constraits */ = {
+			isa = PBXGroup;
+			children = (
+				793DC08F1910DBA500DE18CF /* UIView+CustomConstraints.h */,
+				793DC0901910DBA500DE18CF /* UIView+CustomConstraints.m */,
+			);
+			name = "Custom Constraits";
+			sourceTree = "<group>";
+		};
 		7946AFF0190903720018C0DE /* PasswordView */ = {
 			isa = PBXGroup;
 			children = (
 				7946AFEE1908FD820018C0DE /* passwordView.xib */,
 				7946AFF1190904410018C0DE /* PasswordView.h */,
 				7946AFF2190904410018C0DE /* PasswordView.m */,
-				7946AFF4190918BD0018C0DE /* PasswordViewDelegate.h */,
 			);
 			name = PasswordView;
 			sourceTree = "<group>";
@@ -120,7 +141,6 @@
 				7946AFFA1909537D0018C0DE /* noteNameView.xib */,
 				7946AFFD190955180018C0DE /* NoteNameView.h */,
 				7946AFFE190955180018C0DE /* NoteNameView.m */,
-				7946B0001909553A0018C0DE /* NoteNameDelegate.h */,
 			);
 			name = NotenameView;
 			sourceTree = "<group>";
@@ -164,6 +184,8 @@
 				7946AFF0190903720018C0DE /* PasswordView */,
 				79C3828F1907C98800F43E83 /* MasterViewController */,
 				79C3828E1907C97900F43E83 /* DetailViewController */,
+				793DC0921910DBAC00DE18CF /* Custom Constraits */,
+				793DC08E1910D59B00DE18CF /* NSData+Encryption */,
 				79C382711907C80600F43E83 /* Images.xcassets */,
 				79C3825D1907C80600F43E83 /* Supporting Files */,
 			);
@@ -320,6 +342,8 @@
 				79C3826D1907C80600F43E83 /* MasterViewController.m in Sources */,
 				79C382631907C80600F43E83 /* main.m in Sources */,
 				79C382701907C80600F43E83 /* DetailViewController.m in Sources */,
+				793DC08D1910D59500DE18CF /* NSData+Encryption.m in Sources */,
+				793DC0911910DBA500DE18CF /* UIView+CustomConstraints.m in Sources */,
 				7946AFF3190904410018C0DE /* PasswordView.m in Sources */,
 				7946AFFF190955180018C0DE /* NoteNameView.m in Sources */,
 			);

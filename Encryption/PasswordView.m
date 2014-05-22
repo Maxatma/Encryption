@@ -10,14 +10,18 @@
 
 @implementation PasswordView
 
-- (IBAction)cancelButtonPressed:(id)sender {
+- (IBAction)cancelButtonPressed:(id)sender
+{
     [self.delegate passwordViewCancelButtonPressed];
 }
 
-- (IBAction)okayButtonPressed:(id)sender {
+- (IBAction)okayButtonPressed:(id)sender
+{
     [self.delegate passwordViewOkayButtonPressed];
 }
-- (void) cleanTextField{
+
+- (void) cleanTextField
+{
     self.passTextField.text =@"";
 }
 

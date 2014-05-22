@@ -7,27 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NoteNameView.h"
 #import "PasswordView.h"
 #import "MasterViewController.h"
 
-@interface DetailViewController : UIViewController<NoteNameDelegate,PasswordViewDelegate>
-{
-     UITabBarController* tabBarController;
-}
+@interface DetailViewController : UIViewController<PasswordViewDelegate>
 
-
-@property (nonatomic, strong) UITextView *textView;
-
-@property (nonatomic,strong) NoteNameView  *noteNameView;
-@property (nonatomic,strong) PasswordView *passView;
-
-@property (nonatomic,strong) UIBarButtonItem *doneRightButton;
-@property (nonatomic,assign) BOOL *isNewNote;
-
+@property (nonatomic,assign) BOOL isNewNote;
 @property (nonatomic,strong) NSString *noteTitle;
-@property (nonatomic,strong) NSString *noteContent;
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewBottomConst;
+@property (nonatomic,strong) NSData *noteContent;
 
 @end
